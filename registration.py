@@ -774,8 +774,6 @@ class Graph:
         post: returns True if there is a cycle and False otherwise.
 
         """
-
-        # must be implemented using a DFS; recursive approach recommended
         colors = {v: "white" for v in self.vertices}
         for vertex in self.vertices:
             if colors[vertex] == "white":
@@ -792,9 +790,6 @@ class Graph:
 
         """
 
-        # if start_vertex.visited is True:
-
-        #    return True
         colors[start_vertex] = "gray"
         start_vertex_index = self.get_index(start_vertex.label)
         for neighbor_index in self.get_adjacent_vertices(start_vertex_index):
@@ -824,13 +819,11 @@ class Graph:
         courses_len = len(self.vertices)
         pre_reqs = [0] * courses_len
 
-        # Count prerequisites (in-degrees)
         for i in range(courses_len):
             for j in range(courses_len):
                 if self.adjacency_matrix[i][j] == 1:
                     pre_reqs[j] += 1
 
-        # Get list of available courses (no prereqs)/
         no_pre_reqs = []
         for i in range(courses_len):
             if pre_reqs[i] == 0:
@@ -839,8 +832,8 @@ class Graph:
         result = []
 
         while len(no_pre_reqs) > 0:
-            for i in range(len(no_pre_reqs)-1):
-                for j in range(i+1, len(no_pre_reqs)):
+            for i in range(len(no_pre_reqs) - 1):
+                for j in range(i + 1, len(no_pre_reqs)):
                     one = self.vertices[no_pre_reqs[i]]
                     two = self.vertices[no_pre_reqs[j]]
                     if one.depth < two.depth or (one.depth == two.depth and one.label > two.label):
@@ -848,46 +841,27 @@ class Graph:
                         no_pre_reqs[i] = no_pre_reqs[j]
                         no_pre_reqs[j] = temp
 
+            semester = []
+            count = 0
+            i = 0
+
             next_pre_req = []
 
-            while len(no_pre_reqs) >= 4:
-                semester = []
-                semester.append(self.vertices[no_pre_reqs.pop(0)].label)
-                semester.append(self.vertices[no_pre_reqs.pop(0)].label)
-                semester.append(self.vertices[no_pre_reqs.pop(0)].label)
-                semester.append(self.vertices[no_pre_reqs.pop(0)].label)
-                result.append(semester)
-                for label in semester:
-                    index = -1
-                    for i in range(courses_len):
-                        if self.vertices[i].label == label:
-                            index = i
-                            break
-                    for j in range(courses_len):
-                        if self.adjacency_matrix[index][j] == 1:
-                            pre_reqs[j] = pre_reqs[j] - 1
-                            if pre_reqs[j] == 0:
-                                next_pre_req.append(j)
-            if len(no_pre_reqs) > 0:
-                semester = []
-                while len(no_pre_reqs) > 0:
-                    label = self.vertices[no_pre_reqs.pop(0)].label
-                    semester.append(label)
+            while count < 4 and i < len(no_pre_reqs):
+                index = no_pre_reqs[i]
+                semester.append(self.vertices[index].label)
+                count += 1
 
-                    index = -1
-                    for i in range(courses_len):
-                        if self.vertices[i].label == label:
-                            index = i
-                            break
-                    for j in range(courses_len):
-                        if self.adjacency_matrix[index][j] == 1:
-                            pre_reqs[j] = pre_reqs[j] - 1
-                            if pre_reqs[j] == 0:
-                                next_pre_req.append(j)
-                result.append(semester)
+                for j in range(courses_len):
+                    if self.adjacency_matrix[index][j] == 1:
+                        pre_reqs[j] -= 1
+                        if pre_reqs[j] == 0:
+                            next_pre_req.append(j)
+                i += 1
 
-
-            no_pre_reqs = next_pre_req
+            no_pre_reqs = no_pre_reqs[i:]
+            result.append(semester)
+            no_pre_reqs.extend(next_pre_req)
 
         return result
 
