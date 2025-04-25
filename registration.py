@@ -823,8 +823,6 @@ class Graph:
 
                     return True
 
-        start_vertex.visited = True
-
         colors[start_vertex] = "black"
 
         return False
