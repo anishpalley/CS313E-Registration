@@ -836,7 +836,7 @@ class Graph:
                 for j in range(i + 1, len(no_pre_reqs)):
                     one = self.vertices[no_pre_reqs[i]]
                     two = self.vertices[no_pre_reqs[j]]
-                    if one.depth < two.depth or (one.depth == two.depth and one.label > two.label):
+                    if (one.depth, one.label) > (two.depth, two.label):
                         temp = no_pre_reqs[i]
                         no_pre_reqs[i] = no_pre_reqs[j]
                         no_pre_reqs[j] = temp
