@@ -776,21 +776,12 @@ class Graph:
         """
 
         # must be implemented using a DFS; recursive approach recommended
-
         colors = {v: "white" for v in self.vertices}
-
-
-
         for vertex in self.vertices:
-
             if colors[vertex] == "white":
-
                 if self.dfs_visit(vertex, colors):
-
                     return True
-
         return False
-
 
 
     def dfs_visit(self, start_vertex, colors):
@@ -804,27 +795,16 @@ class Graph:
         # if start_vertex.visited is True:
 
         #    return True
-
         colors[start_vertex] = "gray"
-
         start_vertex_index = self.get_index(start_vertex.label)
-
         for neighbor_index in self.get_adjacent_vertices(start_vertex_index):
-
             neighbor_vertex = self.vertices[neighbor_index]
-
             if colors[neighbor_vertex] == "gray":
-
                 return True
-
             if colors[neighbor_vertex] == "white":
-
                 if self.dfs_visit(neighbor_vertex, colors):
-
                     return True
-
         colors[start_vertex] = "black"
-
         return False
 
     def get_registration_plan(self):
@@ -943,19 +923,12 @@ def main():
     # you will need to call the method to convert them from their labels to their index
 
     for _ in range(number_of_edges):
-
-        labels = sys.stdin.readline()
-
-        labels = labels.strip(" ")
-        first_label = label[0]
-
-        second_label = label[1]
-
+        line = sys.stdin.readline().strip()
+        first_label, second_label = line.split()
         first_index = graph.get_index(first_label)
-
         second_index = graph.get_index(second_label)
-
         graph.add_edge(first_index, second_index)
+
 
     ####################################################################################
 
